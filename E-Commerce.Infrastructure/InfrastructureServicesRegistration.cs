@@ -23,6 +23,8 @@ public static class InfrastructureServicesRegistration
 
         services.AddKeyedScoped<IDataSeeder, CatalogDataSeeder>("Catalog");
 
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
         return services;
     }
 }

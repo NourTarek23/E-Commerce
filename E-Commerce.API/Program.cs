@@ -1,5 +1,6 @@
 
 using E_Commerce.API.Extensions;
+using E_Commerce.Application;
 using E_Commerce.Domain.Contracts;
 using E_Commerce.Infrastructure;
 using E_Commerce.Infrastructure.Data;
@@ -19,6 +20,7 @@ public class Program
         builder.Services.AddOpenApi();
 
         builder.Services.AddInfrastructureServices(builder.Configuration);
+        builder.Services.AddApplicationServices();
 
         var app = builder.Build();
 
