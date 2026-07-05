@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using E_Commerce.Application.Services.Classes;
+using E_Commerce.Application.Services.Contracts;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,7 @@ public static class ApplicationServicesRegistration
     {
         services.AddAutoMapper(C => { }, typeof(ApplicationServicesRegistration).Assembly);
 
+        services.AddScoped<IProductService, ProductService>();
 
         return services;
     }

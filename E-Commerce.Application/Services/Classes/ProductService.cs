@@ -4,11 +4,6 @@ using E_Commerce.Application.DTOs.Products;
 using E_Commerce.Application.Services.Contracts;
 using E_Commerce.Domain.Contracts;
 using E_Commerce.Domain.Entities.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace E_Commerce.Application.Services.Classes;
 

@@ -18,7 +18,12 @@ public class ProductProfile : Profile
         CreateMap<ProductType, TypeDto>();
 
         CreateMap<Product, ProductDto>()
-            .ForMember(D => D.ProductBrand, opt => opt.MapFrom(P => P.Brand.Name))
-            .ForMember(D => D.ProductType, opt => opt.MapFrom(P => P.Type.Name));
+            .ForMember(D => D.ProductBrand, opt => opt.MapFrom(S => S.Brand.Name))
+            .ForMember(D => D.ProductType, opt => opt.MapFrom(S => S.Type.Name))
+            // static mapping and using url here 
+            //.ForMember(D => D.PictureUrl, opt => opt.MapFrom(S => $"/{S.PictureUrl}"))
+            //dynamic mapping of url through sittig it in appsettings and then use class inherited from IValueResolver to get url and set it in your mapping
+            .ForMember(D => D.PictureUrl, opt => opt.MapFrom<PictureUrlResolver>());
+           
     }
 }

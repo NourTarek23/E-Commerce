@@ -4,6 +4,7 @@ using E_Commerce.Application;
 using E_Commerce.Domain.Contracts;
 using E_Commerce.Infrastructure;
 using E_Commerce.Infrastructure.Data;
+using Microsoft.Extensions.FileProviders;
 
 namespace E_Commerce.API;
 
@@ -22,6 +23,11 @@ public class Program
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddApplicationServices();
 
+
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
+
         var app = builder.Build();
 
         await app.SeedAndMigrationDataAsync();
@@ -32,7 +38,15 @@ public class Program
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
+
+        //set your default path to get your files from
+        app.UseStaticFiles(new StaticFileOptions()
+        {
+            FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Files"))
+        });
 
         app.UseHttpsRedirection();
 
