@@ -1,6 +1,8 @@
 ﻿using E_Commerce.Domain.Common;
 using E_Commerce.Domain.Contracts.Repositories;
+using E_Commerce.Domain.Specifications;
 using E_Commerce.Infrastructure.Data;
+using E_Commerce.Infrastructure.Specifications;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,5 +26,18 @@ public class GenericRepository<TEntity, Tkey>(StoreDbContext context) : IGeneric
 
     public void Delete(TEntity entity) => context.Set<TEntity>().Remove(entity);
 
+    public async Task<IReadOnlyList<TEntity>> GetAllAsync(ISpecifications<TEntity, Tkey> specs, CancellationToken ct = default)
+    {
+       return await SpecificationEvaluator.CreateQuery(context.Set<TEntity>(), specs).ToListAsync(ct);
+    }
 
+    public async Task<TEntity?> GetByIdAsync(ISpecifications<TEntity, Tkey> specs, Tkey id, CancellationToken ct = default)
+    {
+        return await SpecificationEvaluator.CreateQuery(context.Set<TEntity>(), specs).FirstOrDefaultAsync(ct);
+    }
+
+    public async Task<int> CountAsync(ISpecifications<TEntity, Tkey> specs, CancellationToken ct = default)
+    {
+        return await SpecificationEvaluator.CreateQuery(context.Set<TEntity>(), specs).CountAsync(ct);
+    }
 }

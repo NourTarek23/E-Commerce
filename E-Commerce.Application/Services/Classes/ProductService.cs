@@ -2,6 +2,7 @@
 using E_Commerce.Application.Common;
 using E_Commerce.Application.DTOs.Products;
 using E_Commerce.Application.Services.Contracts;
+using E_Commerce.Application.Specifications;
 using E_Commerce.Domain.Contracts;
 using E_Commerce.Domain.Entities.Products;
 
@@ -18,13 +19,22 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
         return Result<IReadOnlyList<BrandDto>>.Ok(brandsDTO);
     }
 
-    public async Task<Result<IReadOnlyList<ProductDto>>> GetAllProductsAsync(CancellationToken ct = default)
+    public async Task<Result<PaginationResult<ProductDto>>> GetAllProductsAsync(ProductQueryParams queryParams, CancellationToken ct = default)
     {
-        var products = await unitOfWork.GetRepository<Product, int>().GetAllAsync(ct);
+
+        var specs = new ProductSpecification(queryParams);
+      
+        var products = await unitOfWork.GetRepository<Product, int>().GetAllAsync(specs, ct);
 
         var productsDTO = mapper.Map<IReadOnlyList<ProductDto>>(products);
 
-        return Result<IReadOnlyList<ProductDto>>.Ok(productsDTO);
+        var countSpecs = new ProductsCountSpecifications(queryParams);
+
+        var count = await unitOfWork.GetRepository<Product, int>().CountAsync(countSpecs, ct);
+
+        var value = new PaginationResult<ProductDto>(queryParams.PageIndex, queryParams.PageSize, count, productsDTO);
+
+        return Result<PaginationResult<ProductDto>>.Ok(value);
     }
 
     public async Task<Result<IReadOnlyList<TypeDto>>> GetAllTypesAsync(CancellationToken ct = default)
@@ -38,7 +48,10 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
 
     public async Task<Result<ProductDto>> GetProductByIdAsync(int id, CancellationToken ct = default)
     {
-        var product = await unitOfWork.GetRepository<Product, int>().GetByIdAsync(id, ct);
+
+        var specs = new ProductSpecification(id);
+
+        var product = await unitOfWork.GetRepository<Product, int>().GetByIdAsync(specs, id, ct);
 
         if (product is null)
         {
