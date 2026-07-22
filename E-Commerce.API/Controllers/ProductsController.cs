@@ -1,4 +1,5 @@
-﻿using E_Commerce.Application.Common;
+﻿using E_Commerce.API.Attributes;
+using E_Commerce.Application.Common;
 using E_Commerce.Application.DTOs.Products;
 using E_Commerce.Application.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ public class ProductsController(IProductService productService) : ApiBaseControl
 {
     //Get: api/Products
     [HttpGet]
+    [RedisCache(60)]
     public async Task<ActionResult<PaginationResult<ProductDto>>> GetAllProducts([FromQuery] ProductQueryParams queryParams, CancellationToken ct = default)
     {
         var result = await productService.GetAllProductsAsync(queryParams, ct);
