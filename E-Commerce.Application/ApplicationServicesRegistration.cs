@@ -21,6 +21,7 @@ public static class ApplicationServicesRegistration
 
         services.AddScoped<ICacheService, CacheService>();
 
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
 
         return services;
     }
