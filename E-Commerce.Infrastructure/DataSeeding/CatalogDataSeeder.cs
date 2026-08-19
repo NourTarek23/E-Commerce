@@ -1,5 +1,6 @@
 ﻿using E_Commerce.Domain.Common;
 using E_Commerce.Domain.Contracts;
+using E_Commerce.Domain.Entities.Orders;
 using E_Commerce.Domain.Entities.Products;
 using E_Commerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,8 @@ public class CatalogDataSeeder(StoreDbContext context, ILogger<CatalogDataSeeder
             await context.SaveChangesAsync(ct);
             //products
             await SeedIfEmpty<Product, int>(seedRootPath, "products.json", ct);
+            // Delivery Method
+            await SeedIfEmpty<DeliveryMethod, int>(seedRootPath, "delivery.json", ct);
 
             var count = await context.SaveChangesAsync(ct);
 

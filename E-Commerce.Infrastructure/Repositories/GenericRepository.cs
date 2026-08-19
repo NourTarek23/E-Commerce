@@ -31,7 +31,7 @@ public class GenericRepository<TEntity, Tkey>(StoreDbContext context) : IGeneric
        return await SpecificationEvaluator.CreateQuery(context.Set<TEntity>(), specs).ToListAsync(ct);
     }
 
-    public async Task<TEntity?> GetByIdAsync(ISpecifications<TEntity, Tkey> specs, Tkey id, CancellationToken ct = default)
+    public async Task<TEntity?> GetByIdAsync(ISpecifications<TEntity, Tkey> specs, CancellationToken ct = default)
     {
         return await SpecificationEvaluator.CreateQuery(context.Set<TEntity>(), specs).FirstOrDefaultAsync(ct);
     }

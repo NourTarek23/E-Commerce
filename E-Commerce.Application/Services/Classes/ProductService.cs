@@ -51,7 +51,7 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
 
         var specs = new ProductSpecification(id);
 
-        var product = await unitOfWork.GetRepository<Product, int>().GetByIdAsync(specs, id, ct);
+        var product = await unitOfWork.GetRepository<Product, int>().GetByIdAsync(specs, ct);
 
         if (product is null)
         {
